@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>Мемная капча</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .memes {
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+    gap: 0;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .memes label {
+    cursor: pointer;
+    display: block;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+  }
+  .memes img {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border-radius: 0;
+    border: none;
+    object-fit: cover;
+  }
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + img {
+    border: 3px solid #4CAF50;
+  }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>Выберите картинку с: <strong>{{ correct }}</strong></h1>
+
+<form method="POST" action="{{ url_for('check') }}">
+  <input type="hidden" name="correct" value="{{ correct }}">
+  {% if next_url %}
+    <input type="hidden" name="next_url" value="{{ next_url }}">
+  {% endif %}
+  <div class="memes">
+    {% for meme_name in options %}
+      <label>
+        <input type="radio" name="meme" value="{{ meme_name }}" required>
+        <img src="{{ url_for('static', filename=memes[meme_name]) }}" alt="{{ meme_name }}">
+      </label>
+    {% endfor %}
+  </div>
+  <button type="submit">Проверить</button>
+</form>
+
+</body>
+</html>
